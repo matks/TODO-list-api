@@ -1,0 +1,17 @@
+{
+  "name": "matks/TODO-list-api",
+  "license": "MIT",
+  "type": "project",
+  "autoload": {
+    "psr-4": {
+      "TODOListApi\\": "src/"
+    }
+  },
+  "require": {
+    "silex/silex": "~2.0",
+    "doctrine/dbal": "~2.2",
+    "dflydev/doctrine-orm-service-provider": "^2.0",
+    "symfony/yaml": "^3.1",
+    "symfony/serializer": "^3.1"
+  }
+}

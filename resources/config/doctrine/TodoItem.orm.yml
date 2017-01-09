@@ -1,0 +1,44 @@
+TODOListApi\Domain\TodoItem:
+  type: entity
+  repositoryClass: TODOListApi\Domain\TodolistRepository
+  table: todo_items
+  indexes:
+    due_at_index:
+      columns: [ due_at ]
+    reporter_index:
+      columns: [ reporter ]
+    category_index:
+      columns: [ category ]
+    status_index:
+      columns: [ status ]
+  id:
+    id:
+      type: integer
+      generator:
+        strategy: AUTO
+  fields:
+    created_at:
+      type: datetime
+    updated_at:
+      type: datetime
+    due_at:
+      type: date
+      nullable: true
+    title:
+      type: string
+      length: 255
+    description:
+      type: text
+    reporter:
+      type: string
+      length: 255
+    complexity:
+      type: integer
+      nullable: true
+    category:
+      type: string
+      length: 255
+      nullable: true
+    status:
+      type: string
+      length: 255
