@@ -20,7 +20,7 @@ class TodolistManager
 
     /**
      * @param EntityManager $entityManager
-     * @param string[] $availableReporters
+     * @param string[]      $availableReporters
      */
     public function __construct(EntityManager $entityManager, $availableReporters)
     {
@@ -58,7 +58,7 @@ class TodolistManager
     }
 
     /**
-     * @param TodoItem $item
+     * @param TodoItem          $item
      * @param TodoItemUpdateDTO $dto
      *
      * @return TodoItem

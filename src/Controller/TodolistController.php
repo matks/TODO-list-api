@@ -6,7 +6,6 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\Serializer;
 use TODOListApi\Domain\TodoItem;
 use TODOListApi\Domain\TodolistManager;
@@ -32,9 +31,9 @@ class TodolistController extends BaseController
     private $serializer;
 
     /**
-     * @param EntityManager $doctrine
+     * @param EntityManager   $doctrine
      * @param TodolistManager $todoListManager
-     * @param Serializer $serializer
+     * @param Serializer      $serializer
      */
     public function __construct(
         EntityManager $doctrine,
@@ -150,7 +149,7 @@ class TodolistController extends BaseController
         }
 
         if (false === in_array($item->getStatus(), $pendingStatuses)) {
-            return $this->buildBadRequestResponse(['id' => "Only pending items can start progress"]);
+            return $this->buildBadRequestResponse(['id' => 'Only pending items can start progress']);
         }
 
         $result = $this->todoListManager->complete($itemId);

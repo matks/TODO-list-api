@@ -62,13 +62,13 @@ class TodoItem
     private $status;
 
     /**
-     * @param string $title
-     * @param string $description
+     * @param string    $title
+     * @param string    $description
      * @param \DateTime $dueAt
-     * @param string $reporter
-     * @param int $complexity
-     * @param string $category
-     * @param string $status
+     * @param string    $reporter
+     * @param int       $complexity
+     * @param string    $category
+     * @param string    $status
      */
     public function __construct(
         $title,
@@ -188,11 +188,11 @@ class TodoItem
     }
 
     /**
-     * @param string $title
-     * @param string $description
+     * @param string    $title
+     * @param string    $description
      * @param \DateTime $dueAt
-     * @param int $complexity
-     * @param string $category
+     * @param int       $complexity
+     * @param string    $category
      */
     public function update(
         $title,

@@ -1,19 +1,19 @@
 <?php
 
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__.'/../vendor/autoload.php';
 
 $app = new Silex\Application();
 
 /* Silex setup */
 
-$paramFilepath = realpath(__DIR__ . '/../app/parameters.yml');
+$paramFilepath = realpath(__DIR__.'/../app/parameters.yml');
 if (!file_exists($paramFilepath)) {
     throw new \RuntimeException('No parameters.yml');
 }
 
 $parameters = \Symfony\Component\Yaml\Yaml::parse(file_get_contents($paramFilepath));
 
-$configFilepath = realpath(__DIR__ . '/../app/config.yml');
+$configFilepath = realpath(__DIR__.'/../app/config.yml');
 $configAsAString = file_get_contents($configFilepath);
 
 $configAsAString = \TODOListApi\Application\ParametersConfigHandler::replaceParametersInConfig(
@@ -22,8 +22,8 @@ $configAsAString = \TODOListApi\Application\ParametersConfigHandler::replacePara
 );
 
 $configuration = \Symfony\Component\Yaml\Yaml::parse($configAsAString);
-$configuration['cache_path'] = realpath(__DIR__ . '/../app/cache/');
-$configuration['doctrine_orm_path'] = realpath(__DIR__ . '/../resources/config/doctrine/');
+$configuration['cache_path'] = realpath(__DIR__.'/../app/cache/');
+$configuration['doctrine_orm_path'] = realpath(__DIR__.'/../resources/config/doctrine/');
 
 \TODOListApi\Application\Configurator::configureApp($app, $configuration);
 

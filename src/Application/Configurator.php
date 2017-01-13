@@ -18,7 +18,7 @@ class Configurator
 {
     /**
      * @param Application $app
-     * @param array $configuration
+     * @param array       $configuration
      */
     public static function configureApp(Application $app, array $configuration)
     {
@@ -28,7 +28,7 @@ class Configurator
 
     /**
      * @param Application $app
-     * @param array $configuration
+     * @param array       $configuration
      */
     private static function registerServiceProviders(Application $app, array $configuration)
     {
@@ -37,7 +37,7 @@ class Configurator
         ));
         $app->register(new DoctrineOrmServiceProvider());
 
-        $app['orm.proxies_dir'] = $configuration['cache_path'] . '/doctrine/proxies';
+        $app['orm.proxies_dir'] = $configuration['cache_path'].'/doctrine/proxies';
         $app['orm.default_cache'] = 'array';
         $app['orm.em.options'] = array(
             'mappings' => array(
@@ -54,7 +54,7 @@ class Configurator
 
     /**
      * @param Application $app
-     * @param array $configuration
+     * @param array       $configuration
      */
     private static function registerServices(Application $app, array $configuration)
     {

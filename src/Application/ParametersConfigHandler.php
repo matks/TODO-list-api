@@ -5,7 +5,7 @@ namespace TODOListApi\Application;
 class ParametersConfigHandler
 {
     /**
-     * @param array $parameters
+     * @param array  $parameters
      * @param string $configAsAString
      *
      * @return string
@@ -29,7 +29,7 @@ class ParametersConfigHandler
     private static function computePlaceHolders(array $parameterKeys)
     {
         $placeholders = array_map(function ($key) {
-            return '%' . $key . '%';
+            return '%'.$key.'%';
         }, $parameterKeys);
 
         return $placeholders;
@@ -50,7 +50,7 @@ class ParametersConfigHandler
             }
             if (is_array($value)) {
                 $stringifiedSubObject = self::stringify($value);
-                $stringifiedParameters[$key] = "['" . implode("', '", $stringifiedSubObject) . "']";
+                $stringifiedParameters[$key] = "['".implode("', '", $stringifiedSubObject)."']";
             } else {
                 $stringifiedParameters[$key] = $value;
             }
