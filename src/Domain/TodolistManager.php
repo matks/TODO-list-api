@@ -4,6 +4,7 @@ namespace TODOListApi\Domain;
 
 use Doctrine\ORM\EntityManager;
 use TODOListApi\DTO\TodoItemCreationDTO;
+use TODOListApi\DTO\TodoItemUpdateDTO;
 
 class TodolistManager
 {
@@ -34,8 +35,8 @@ class TodolistManager
      */
     public function create(TodoItemCreationDTO $dto)
     {
-        if (null !== $dto->due_at) {
-            $dueAt = new \DateTime($dto->due_at);
+        if (null !== $dto->dueAt) {
+            $dueAt = new \DateTime($dto->dueAt);
         } else {
             $dueAt = null;
         }
@@ -48,6 +49,34 @@ class TodolistManager
             $dto->complexity,
             $dto->category,
             TodoItem::STATUS_TODO
+        );
+
+        $this->entityManager->persist($item);
+        $this->entityManager->flush();
+
+        return $item;
+    }
+
+    /**
+     * @param TodoItem $item
+     * @param TodoItemUpdateDTO $dto
+     *
+     * @return TodoItem
+     */
+    public function update(TodoItem $item, TodoItemUpdateDTO $dto)
+    {
+        if (null !== $dto->dueAt) {
+            $dueAt = new \DateTime($dto->dueAt);
+        } else {
+            $dueAt = null;
+        }
+
+        $item->update(
+            $dto->title,
+            $dto->description,
+            $dueAt,
+            $dto->complexity,
+            $dto->category
         );
 
         $this->entityManager->persist($item);

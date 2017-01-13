@@ -17,13 +17,16 @@ TODOListApi\Domain\TodoItem:
       generator:
         strategy: AUTO
   fields:
-    created_at:
+    createdAt:
       type: datetime
-    updated_at:
+      column: created_at
+    updatedAt:
       type: datetime
-    due_at:
+      column: updated_at
+    dueAt:
       type: date
       nullable: true
+      column: due_at
     title:
       type: string
       length: 255

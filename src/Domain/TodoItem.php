@@ -19,17 +19,17 @@ class TodoItem
     /**
      * @var \DateTime
      */
-    private $created_at;
+    private $createdAt;
 
     /**
      * @var \DateTime
      */
-    private $updated_at;
+    private $updatedAt;
 
     /**
      * @var \DateTime
      */
-    private $due_at;
+    private $dueAt;
 
     /**
      * @var string
@@ -62,25 +62,25 @@ class TodoItem
     private $status;
 
     /**
-     * @param $title
-     * @param $description
-     * @param $due_at
-     * @param $reporter
-     * @param $complexity
-     * @param $category
-     * @param $status
+     * @param string $title
+     * @param string $description
+     * @param \DateTime $dueAt
+     * @param string $reporter
+     * @param int $complexity
+     * @param string $category
+     * @param string $status
      */
     public function __construct(
         $title,
         $description,
-        $due_at,
+        $dueAt,
         $reporter,
         $complexity,
         $category,
         $status)
     {
-        $this->created_at = new \DateTime();
-        $this->due_at = $due_at;
+        $this->createdAt = new \DateTime();
+        $this->dueAt = $dueAt;
         $this->title = $title;
         $this->description = $description;
         $this->reporter = $reporter;
@@ -102,7 +102,7 @@ class TodoItem
      */
     public function getCreatedAt()
     {
-        return $this->created_at;
+        return $this->createdAt;
     }
 
     /**
@@ -110,7 +110,7 @@ class TodoItem
      */
     public function getUpdatedAt()
     {
-        return $this->updated_at;
+        return $this->updatedAt;
     }
 
     /**
@@ -118,7 +118,7 @@ class TodoItem
      */
     public function getDueAt()
     {
-        return $this->due_at;
+        return $this->dueAt;
     }
 
     /**
@@ -169,18 +169,6 @@ class TodoItem
         return $this->status;
     }
 
-    /**
-     * @return string[]
-     */
-    public function getAvailableStatuses()
-    {
-        return [
-            self::STATUS_TODO,
-            self::STATUS_IN_PROGRESS,
-            self::STATUS_DONE,
-        ];
-    }
-
     public function startProgress()
     {
         if ($this->status !== self::STATUS_TODO) {
@@ -197,5 +185,38 @@ class TodoItem
         }
 
         $this->status = self::STATUS_DONE;
+    }
+
+    /**
+     * @param string $title
+     * @param string $description
+     * @param \DateTime $dueAt
+     * @param int $complexity
+     * @param string $category
+     */
+    public function update(
+        $title,
+        $description,
+        $dueAt,
+        $complexity,
+        $category)
+    {
+        $this->dueAt = $dueAt;
+        $this->title = $title;
+        $this->description = $description;
+        $this->complexity = $complexity;
+        $this->category = $category;
+    }
+
+    /**
+     * @return string[]
+     */
+    public static function getAvailableStatuses()
+    {
+        return [
+            self::STATUS_TODO,
+            self::STATUS_IN_PROGRESS,
+            self::STATUS_DONE,
+        ];
     }
 }

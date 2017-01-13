@@ -6,11 +6,13 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\Serializer;
 use TODOListApi\Domain\TodoItem;
 use TODOListApi\Domain\TodolistManager;
 use TODOListApi\Domain\TodolistRepository;
 use TODOListApi\DTO\TodoItemCreationDTO;
+use TODOListApi\DTO\TodoItemUpdateDTO;
 
 class TodolistController extends BaseController
 {
@@ -51,7 +53,7 @@ class TodolistController extends BaseController
      */
     public function createAction(Request $request)
     {
-        $dto = $this->buildDTO($request->request);
+        $dto = $this->buildCreationDTO($request->request);
 
         $errors = $dto->isValid();
         if (true !== $errors) {
@@ -59,6 +61,37 @@ class TodolistController extends BaseController
         }
 
         $item = $this->todoListManager->create($dto);
+
+        return $this->buildSuccessfulResponse(['id' => $item->getId()]);
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function updateAction(Request $request)
+    {
+        $bag = $request->attributes;
+        $itemId = $bag->get('id');
+
+        if (null === $itemId) {
+            return $this->buildBadRequestResponse(['id' => 'id is mandatory']);
+        }
+
+        $item = $this->getTodoItemById($itemId);
+        if (null === $item) {
+            return $this->buildBadRequestResponse(['id' => "Cannot find TODO item for id $itemId"]);
+        }
+
+        $dto = $this->buildUpdateDTO($request->request);
+
+        $errors = $dto->isValid();
+        if (true !== $errors) {
+            return $this->buildBadRequestResponse($errors);
+        }
+
+        $item = $this->todoListManager->update($item, $dto);
 
         return $this->buildSuccessfulResponse(['id' => $item->getId()]);
     }
@@ -77,12 +110,11 @@ class TodolistController extends BaseController
             return $this->buildBadRequestResponse(['id' => 'id is mandatory']);
         }
 
-        $repository = $this->getTodoItemRepository();
-        $items = $repository->findBy(['id' => $itemId]);
-        if (empty($items)) {
+        $item = $this->getTodoItemById($itemId);
+        if (null === $item) {
             return $this->buildBadRequestResponse(['id' => "Cannot find TODO item for id $itemId"]);
         }
-        $item = current($items);
+
         if (TodoItem::STATUS_TODO !== $item->getStatus()) {
             return $this->buildBadRequestResponse(['id' => "Only 'todo' items can start progress"]);
         }
@@ -112,12 +144,11 @@ class TodolistController extends BaseController
 
         $pendingStatuses = [TodoItem::STATUS_TODO, TodoItem::STATUS_IN_PROGRESS];
 
-        $repository = $this->getTodoItemRepository();
-        $items = $repository->findBy(['id' => $itemId]);
-        if (empty($items)) {
+        $item = $this->getTodoItemById($itemId);
+        if (null === $item) {
             return $this->buildBadRequestResponse(['id' => "Cannot find TODO item for id $itemId"]);
         }
-        $item = current($items);
+
         if (false === in_array($item->getStatus(), $pendingStatuses)) {
             return $this->buildBadRequestResponse(['id' => "Only pending items can start progress"]);
         }
@@ -143,9 +174,8 @@ class TodolistController extends BaseController
             return $this->buildBadRequestResponse(['id' => 'id is mandatory']);
         }
 
-        $repository = $this->getTodoItemRepository();
-        $item = $repository->findBy(['id' => $itemId]);
-        if (empty($item)) {
+        $item = $this->getTodoItemById($itemId);
+        if (null === $item) {
             return $this->buildBadRequestResponse(['id' => "Cannot find TODO item for id $itemId"]);
         }
 
@@ -174,8 +204,20 @@ class TodolistController extends BaseController
      */
     public function getAction($id)
     {
-        $repository = $this->getTodoItemRepository();
-        $result = $repository->findOneBy(['id' => $id]);
+        $item = $this->getTodoItemById($id);
+        if (null === $item) {
+            return $this->buildBadRequestResponse(['id' => "Cannot find TODO item for id $id"]);
+        }
+
+        return $this->serializer->serialize($item, 'json');
+    }
+
+    /**
+     * @return JsonResponse
+     */
+    public function getReportersAction()
+    {
+        $result = $this->todoListManager->getAvailableReporters();
 
         return $this->serializer->serialize($result, 'json');
     }
@@ -185,17 +227,35 @@ class TodolistController extends BaseController
      *
      * @return TodoItemCreationDTO
      */
-    private function buildDTO(ParameterBag $bag)
+    private function buildCreationDTO(ParameterBag $bag)
     {
         $dto = new TodoItemCreationDTO();
 
-        $dto->due_at = $bag->get('due_at');
+        $dto->dueAt = $bag->get('dueAt');
         $dto->title = $bag->get('title');
         $dto->description = $bag->get('description');
         $dto->reporter = $bag->get('reporter');
         $dto->complexity = $bag->get('complexity');
         $dto->category = $bag->get('category');
         $dto->availableReporters = $this->todoListManager->getAvailableReporters();
+
+        return $dto;
+    }
+
+    /**
+     * @param ParameterBag $bag
+     *
+     * @return TodoItemUpdateDTO
+     */
+    private function buildUpdateDTO(ParameterBag $bag)
+    {
+        $dto = new TodoItemUpdateDTO();
+
+        $dto->dueAt = $bag->get('dueAt');
+        $dto->title = $bag->get('title');
+        $dto->description = $bag->get('description');
+        $dto->complexity = $bag->get('complexity');
+        $dto->category = $bag->get('category');
 
         return $dto;
     }
@@ -208,5 +268,22 @@ class TodolistController extends BaseController
         $repository = $this->doctrine->getRepository('TODOListApi\Domain\TodoItem');
 
         return $repository;
+    }
+
+    /**
+     * @param int $itemId
+     *
+     * @return TodoItem|null
+     */
+    private function getTodoItemById($itemId)
+    {
+        $repository = $this->getTodoItemRepository();
+        $items = $repository->findBy(['id' => $itemId]);
+        if (empty($items)) {
+            return null;
+        }
+        $item = current($items);
+
+        return $item;
     }
 }

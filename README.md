@@ -33,7 +33,8 @@ Available API endpoints are:
 GET /items : get all items
 GET /item/{id} : get item by id
 POST /item/{id} : create item
-PUT /item/{id}/start-progress : start progress on item
-PUT /item/{id}/complete : complete item
+PUT /item/{id} : update item
+POST /item/{id}/start-progress : start progress on item
+POST /item/{id}/complete : complete item
 DELETE /item/{id} : delete item
 ```
