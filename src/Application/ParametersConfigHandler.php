@@ -14,7 +14,7 @@ class ParametersConfigHandler
     {
         $configAsAString = str_replace(
             self::computePlaceHolders(array_keys($parameters)),
-            array_values($parameters),
+            self::stringify(array_values($parameters)),
             $configAsAString
         );
 
@@ -33,5 +33,29 @@ class ParametersConfigHandler
         }, $parameterKeys);
 
         return $placeholders;
+    }
+
+    /**
+     * @param array $parameterValues
+     *
+     * @return string[]
+     */
+    private static function stringify(array $parameterValues)
+    {
+        $stringifiedParameters = [];
+
+        foreach ($parameterValues as $key => $value) {
+            if (is_object($value)) {
+                throw new \RuntimeException('Cannot stringify an object');
+            }
+            if (is_array($value)) {
+                $stringifiedSubObject = self::stringify($value);
+                $stringifiedParameters[$key] = "['" . implode("', '", $stringifiedSubObject) . "']";
+            } else {
+                $stringifiedParameters[$key] = $value;
+            }
+        }
+
+        return $stringifiedParameters;
     }
 }

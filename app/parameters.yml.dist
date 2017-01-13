@@ -5,3 +5,4 @@ parameters:
   db_host: localhost
   db_port: 8889
   environment: dev
+  reporters: ['mathieu', 'james', 'ludovic']

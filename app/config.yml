@@ -7,7 +7,4 @@ db:
     driver: pdo_mysql
     port: %db_port%
 
-reporters:
-  - mathieu
-  - james
-  - ludovic
+reporters: %reporters%
