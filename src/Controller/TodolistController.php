@@ -166,6 +166,34 @@ class TodolistController extends BaseController
      *
      * @return JsonResponse
      */
+    public function resetStatusAction(Request $request)
+    {
+        $bag = $request->attributes;
+        $itemId = $bag->get('id');
+
+        if (null === $itemId) {
+            return $this->buildBadRequestResponse(['id' => 'id is mandatory']);
+        }
+
+        $item = $this->getTodoItemById($itemId);
+        if (null === $item) {
+            return $this->buildBadRequestResponse(['id' => "Cannot find TODO item for id $itemId"]);
+        }
+
+        $result = $this->todoListManager->resetStatus($itemId);
+
+        if (true === $result) {
+            return $this->buildSuccessfulResponse();
+        } else {
+            return $this->buildBadResponse();
+        }
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
     public function deleteAction(Request $request)
     {
         $itemId = $request->attributes->get('id');

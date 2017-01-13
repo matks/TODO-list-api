@@ -132,6 +132,27 @@ class TodolistManager
      *
      * @return bool
      */
+    public function resetStatus($itemId)
+    {
+        /** @var TodoItem $item */
+        $item = $this->entityManager->getRepository('TODOListApi\Domain\TodoItem')->findOneBy(['id' => $itemId]);
+
+        if (null === $item) {
+            throw new \Exception("Could not find item with id $itemId");
+        }
+
+        $item->resetStatus();
+
+        $this->entityManager->flush();
+
+        return true;
+    }
+
+    /**
+     * @param int $itemId
+     *
+     * @return bool
+     */
     public function delete($itemId)
     {
         /** @var TodoItem $item */

@@ -36,5 +36,6 @@ POST /item/{id} : create item
 PUT /item/{id} : update item
 POST /item/{id}/start-progress : start progress on item
 POST /item/{id}/complete : complete item
+POST /item/{id}/reset-status : reset item status
 DELETE /item/{id} : delete item
 ```

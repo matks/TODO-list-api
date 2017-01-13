@@ -187,6 +187,11 @@ class TodoItem
         $this->status = self::STATUS_DONE;
     }
 
+    public function resetStatus()
+    {
+        $this->status = self::STATUS_TODO;
+    }
+
     /**
      * @param string    $title
      * @param string    $description

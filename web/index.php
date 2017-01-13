@@ -49,6 +49,7 @@ $app->get('/reporters', 'todolist.controller:getReportersAction')->bind('api_tod
 $app->get('/item/{id}', 'todolist.controller:getAction')->bind('api_todolist_get');
 $app->post('/item/{id}/start-progress', 'todolist.controller:startProgressAction')->bind('api_todolist_start_progress');
 $app->post('/item/{id}/complete', 'todolist.controller:completeAction')->bind('api_todolist_complete');
+$app->post('/item/{id}/reset-status', 'todolist.controller:resetStatusAction')->bind('api_todolist_reset_status');
 $app->delete('/item/{id}', 'todolist.controller:deleteAction')->bind('api_todolist_delete');
 
 $app->run();
