@@ -19,6 +19,11 @@ fill it with the configuration of you server.
 $ cp app/parameters.yml.dist app/parameters.yml
 ```
 
+Create the SQL schema with Doctrine command tools:
+```
+$ php app/console orm:schema-tool:create
+```
+
 Setup a virtual host for prod environment.
 
 For dev environment, you can use PHP built-in server:
