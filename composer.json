@@ -12,6 +12,7 @@
     "doctrine/dbal": "~2.2",
     "dflydev/doctrine-orm-service-provider": "^2.0",
     "symfony/yaml": "^3.1",
-    "symfony/serializer": "^3.1"
+    "symfony/serializer": "^3.1",
+    "symfony/console": "^3.2"
   }
 }
